@@ -15,32 +15,29 @@ const MiniPageBuilder = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [focused, setFocused] = useState(false);
 
-
   const handleDragStart = (event, type, index = "") => {
-    event.target.classList.add("dragging"); 
-    const boundingRect = event.target.getBoundingClientRect(); 
+    event.target.classList.add("dragging");
+    const boundingRect = event.target.getBoundingClientRect();
 
     const offsetX = event.clientX - boundingRect.left;
     const offsetY = event.clientY - boundingRect.top;
     event.dataTransfer.setData(
       "text/plain",
-      JSON.stringify({ type, index, offsetX, offsetY }) 
+      JSON.stringify({ type, index, offsetX, offsetY })
     );
   };
 
   const handleDragEnd = (event) => {
-    event.target.classList.remove("dragging"); 
+    event.target.classList.remove("dragging");
   };
-
 
   const handleDrop = (event) => {
     event.preventDefault();
-    const data = event.dataTransfer.getData("text/plain"); 
-    const { type, index, offsetX, offsetY } = JSON.parse(data); 
-    const { clientX, clientY } = event; 
+    const data = event.dataTransfer.getData("text/plain");
+    const { type, index, offsetX, offsetY } = JSON.parse(data);
+    const { clientX, clientY } = event;
 
     const updatedComponents = [...components];
-
 
     if (updatedComponents[index]) {
       updatedComponents[index] = {
@@ -49,31 +46,28 @@ const MiniPageBuilder = () => {
         clientX: clientX - offsetX,
         clientY: clientY - offsetY,
       };
-      setComponents(updatedComponents); 
-      saveToLocalStorage(updatedComponents); 
+      setComponents(updatedComponents);
+      saveToLocalStorage(updatedComponents);
       return;
     }
 
     setCoordinates({
       ...coordinates,
       clientX: clientX - offsetX,
-      clientY: clientY - offsetY + 20, 
+      clientY: clientY - offsetY + 20,
       mode: "",
       type,
     });
-    setIsOpen(true); 
+    setIsOpen(true);
   };
-
 
   const handleSelect = (index) => {
     setSelectedComponentIndex(index);
   };
 
-
   const handleSaveChanges = (inputValues, mode, index) => {
     const updatedComponents = [...components];
     if (mode == "edit") {
-  
       if (updatedComponents[index]) {
         updatedComponents[index] = {
           ...updatedComponents[index],
@@ -81,11 +75,10 @@ const MiniPageBuilder = () => {
           clientX: inputValues.clientX,
           clientY: inputValues.clientY,
         };
-        setComponents(updatedComponents); 
+        setComponents(updatedComponents);
         saveToLocalStorage(updatedComponents);
       }
     } else {
-  
       updatedComponents.push({
         type: coordinates.type,
         clientX: inputValues.clientX,
@@ -94,12 +87,11 @@ const MiniPageBuilder = () => {
         fontSize: inputValues.fontSize,
         fontWeight: inputValues.fontWeight,
       });
-      setComponents(updatedComponents); 
-      saveToLocalStorage(updatedComponents); 
-        }
+      setComponents(updatedComponents);
+      saveToLocalStorage(updatedComponents);
+    }
     setIsOpen(false);
   };
-
 
   const handleCloseModal = () => {
     setIsOpen(false);
@@ -107,13 +99,12 @@ const MiniPageBuilder = () => {
 
   const handleKeyPress = (event) => {
     debugger;
-    
+
     if (event.key === "Enter") {
       event.preventDefault();
       setCoordinates({ ...coordinates, mode: "edit" });
       setIsOpen(true);
-    } 
-    else if (event.key === "Backspace" && !focused) {
+    } else if (event.key === "Backspace" && !focused) {
       event.preventDefault();
       let x = components.filter((_, index) => index !== selectedComponentIndex);
       setComponents(x);
@@ -121,15 +112,13 @@ const MiniPageBuilder = () => {
     }
   };
 
-
   const saveToLocalStorage = (updatedComponents) => {
     localStorage.setItem("components", JSON.stringify(updatedComponents));
   };
- 
+
   useEffect(() => {
     setSelectedComponentIndex(null);
   }, [components.length]);
-
 
   useEffect(() => {
     const storedComponents = JSON.parse(localStorage.getItem("components"));
@@ -146,7 +135,6 @@ const MiniPageBuilder = () => {
     link.download = "pageBuilderConfiguration.json";
     link.click();
   };
-
 
   const handleChange = (event, index) => {
     const updatedComponents = [...components];
@@ -167,13 +155,11 @@ const MiniPageBuilder = () => {
         tabIndex={0}
         onKeyDown={(e) => handleKeyPress(e)}
       >
-    
         <div
           className="blankContainer"
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
-          >
-   
+        >
           {components.map((component, index) => (
             <div
               draggable
@@ -210,7 +196,7 @@ const MiniPageBuilder = () => {
             </div>
           ))}
         </div>
-    
+
         <div className="sidebarContainer">
           <div>
             <h3>Blocks</h3>
@@ -250,14 +236,11 @@ const MiniPageBuilder = () => {
               />
               <p>Button</p>
             </div>
-             <div className="configBtn">
-               <button onClick={handleExport}>Json Data Downlode</button>
-             </div>
           </div>
-          
-          
         </div>
-        
+        <div className="configBtn">
+          <button onClick={handleExport}>Export Configuration</button>
+        </div>
       </div>
       {/* rendering modal */}
       <Modal

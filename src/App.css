@@ -36,7 +36,7 @@
   display: flex;
   gap: 5px;
   padding: 5px;
-  cursor: grab
+  cursor: grab;
 }
 
 .component_selected {
@@ -56,10 +56,12 @@ h3 {
   cursor: grabbing;
 }
 .configBtn {
-  background-color: #FA5252;
+  position: absolute;
+  background-color: #fa5252;
   display: flex;
   justify-content: center;
-  align-self: flex-end; /* Aligns the div to the end of its container */
+  align-self: flex-start;
+  top:10px; /* Aligns the div to the end of its container */
 }
 
 .modal {
@@ -87,7 +89,7 @@ h3 {
   max-width: 400px;
 }
 
-.modal-heading{
+.modal-heading {
   display: flex;
   justify-content: space-between;
 }
@@ -126,12 +128,11 @@ button {
   opacity: 0px;
   background: #25262b;
   color: #ffffff;
-  background: linear-gradient(91.73deg, #FA5252 -2.99%, #A91919 95.8%);
+  background: linear-gradient(91.73deg, #fa5252 -2.99%, #a91919 95.8%);
   cursor: pointer;
-  
 }
 
-.cancel{
+.cancel {
   height: 20px;
   width: 20px;
   margin-top: 6%;
